@@ -1,0 +1,213 @@
+---
+format:
+  html:
+    css: styles.css
+execute: 
+  echo: false
+  warning: false
+---
+
+## Plots
+
+The **3D scatter plots** were created using the **Plotly** library to visualize the relationships between **age**, **income**, **education**, **mortgage**, and **personal loan acceptance**. Each plot includes three axes representing different variables, with points colored to indicate loan acceptance (Yes) or rejection (No). The use of **3D models** provides a more comprehensive understanding by displaying interactions between three variables simultaneously. This approach highlights patterns and trends that might be overlooked in **2D visualizations**, offering a deeper insight into the data.
+
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(brms)
+library(plotly)
+library(tidybayes)
+library(gtsummary)
+library(ggridges)
+
+x <- read.csv("Bank_Personal_Loan_Modelling.csv") |> 
+  select(Age, Income, Education, Mortgage, Personal.Loan) |>
+  mutate(Treatment = ifelse(Personal.Loan > 0, "Yes", "No"))
+
+```
+
+
+```{r}
+#| cache: true
+#| warning: false
+
+fit_gauss <- brm(formula = Personal.Loan ~ Age + Income + Education + Mortgage + Treatment,
+                data = x,
+                family = gaussian(),
+                refresh = 0,
+                silent = 2,
+                seed = 9)
+
+```
+
+
+```{r}
+#| cache: true
+#| message: false
+#| warning: false
+
+# Create a 3D scatter plot for Age, Income, and Personal Loan
+fig1 <- plot_ly(
+  x = ~x$Age,
+  y = ~x$Income,
+  z = ~x$Personal.Loan,
+  color = ~x$Treatment,
+  colors = c('#ff5c5c', '#5cd1ff'),
+  type = 'scatter3d',
+  mode = 'markers'
+) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = 'Age'),
+      yaxis = list(title = 'Income'),
+      zaxis = list(title = 'Personal Loan'),
+      bgcolor = '#0b0a09'
+    ),
+    paper_bgcolor = '#0b0a09',
+    font = list(color = 'white'),
+    legend = list(
+      itemsizing = 'constant',
+      tracegroupgap = 5,
+      title = list(text = 'Loan Acceptance'),
+      items = list(
+        list(name = 'Yes', symbol = 'circle', color = '#ff5c5c'),
+        list(name = 'No', symbol = 'circle', color = '#5cd1ff')
+      )
+    )
+  )
+
+fig1
+```
+
+**Summary**: This 3D scatter plot visualizes the relationship between age, income, and personal loan acceptance. The colors indicate whether the loan was accepted (Yes) or not (No). The plot helps in understanding how age and income affect the likelihood of personal loan acceptance.
+
+```{r}
+#| cache: true
+#| message: false
+#| warning: false
+
+# Create a 3D scatter plot for Age, Education, and Personal Loan
+fig2 <- plot_ly(
+  x = ~x$Age,
+  y = ~x$Education,
+  z = ~x$Personal.Loan,
+  color = ~x$Treatment,
+  colors = c('#ff5c5c', '#5cd1ff'),
+  type = 'scatter3d',
+  mode = 'markers'
+) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = 'Age'),
+      yaxis = list(title = 'Education'),
+      zaxis = list(title = 'Personal Loan'),
+      bgcolor = '#0b0a09'
+    ),
+    paper_bgcolor = '#0b0a09',
+    font = list(color = 'white'),
+    legend = list(
+      itemsizing = 'constant',
+      tracegroupgap = 5,
+      title = list(text = 'Loan Acceptance'),
+      items = list(
+        list(name = 'Yes', symbol = 'circle', color = '#ff5c5c'),
+        list(name = 'No', symbol = 'circle', color = '#5cd1ff')
+      )
+    )
+  )
+
+fig2
+```
+
+
+**Summary**: This 3D scatter plot illustrates the relationship between age, education, and personal loan acceptance. Different colors represent whether the loan was accepted (Yes) or not (No). The plot provides insights into how age and education levels influence personal loan acceptance.
+
+```{r}
+#| cache: true
+#| message: false
+#| warning: false
+
+# Create a 3D scatter plot for Income, Education, and Personal Loan
+fig3 <- plot_ly(
+  x = ~x$Income,
+  y = ~x$Education,
+  z = ~x$Personal.Loan,
+  color = ~x$Treatment,
+  colors = c('#ff5c5c', '#5cd1ff'),
+  type = 'scatter3d',
+  mode = 'markers'
+) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = 'Income'),
+      yaxis = list(title = 'Education'),
+      zaxis = list(title = 'Personal Loan'),
+      bgcolor = '#0b0a09'
+    ),
+    paper_bgcolor = '#0b0a09',
+    font = list(color = 'white'),
+    legend = list(
+      itemsizing = 'constant',
+      tracegroupgap = 5,
+      title = list(text = 'Loan Acceptance'),
+      items = list(
+        list(name = 'Yes', symbol = 'circle', color = '#ff5c5c'),
+        list(name = 'No', symbol = 'circle', color = '#5cd1ff')
+      )
+    )
+  )
+
+fig3
+```
+
+
+**Summary**: This 3D scatter plot displays the relationship between income, education, and personal loan acceptance. The colors differentiate between accepted (Yes) and rejected (No) loans. The plot helps in analyzing the combined effect of income and education on personal loan acceptance.
+
+
+```{r}
+#| cache: true
+#| message: false
+#| warning: false
+
+# Create a 3D scatter plot for Age, Mortgage, and Personal Loan
+fig4 <- plot_ly(
+  x = ~x$Age,
+  y = ~x$Mortgage,
+  z = ~x$Personal.Loan,
+  color = ~x$Treatment,
+  colors = c('#ff5c5c', '#5cd1ff'),
+  type = 'scatter3d',
+  mode = 'markers'
+) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = 'Age'),
+      yaxis = list(title = 'Mortgage'),
+      zaxis = list(title = 'Personal Loan'),
+      bgcolor = '#0b0a09'
+    ),
+    paper_bgcolor = '#0b0a09',
+    font = list(color = 'white'),
+    legend = list(
+      itemsizing = 'constant',
+      tracegroupgap = 5,
+      title = list(text = 'Loan Acceptance'),
+      items = list(
+        list(name = 'Yes', symbol = 'circle', color = '#ff5c5c'),
+        list(name = 'No', symbol = 'circle', color = '#5cd1ff')
+      )
+    )
+  )
+
+fig4
+```
+
+
+**Summary**: This 3D scatter plot shows the relationship between age, mortgage, and personal loan acceptance. The colors indicate whether the loan was accepted (Yes) or not (No). The plot aids in understanding how age and mortgage status impact personal loan acceptance.
+
+
+

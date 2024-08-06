@@ -1,0 +1,23 @@
+---
+format:
+  html:
+    css: styles.css
+execute: 
+  echo: false
+  warning: false
+---
+
+
+# Sources
+
+## The Dataset I Used For this Project:
+
+- [Kaggle: Personal Loan Data](https://www.kaggle.com/datasets/mbsoroush/personal-loan-dataset)
+
+## The Resources I Used For this Project:
+
+- [The Primer](https://ppbds.github.io/primer/cardinal-virtues.html)
+- [Previous Final Projects](https://bootcamp.davidkane.info/projects.html)
+- [ChatGPT](chat.openai.com)
+- [Kaggle EDA](https://www.kaggle.com)
+- [Github + Github Pages](https://github.com/)

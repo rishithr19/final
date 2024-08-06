@@ -1,0 +1,69 @@
+---
+format:
+  html:
+    css: styles.css
+execute: 
+  echo: false
+  warning: false
+---
+
+# **Project Information**
+
+## What Affects Personal Loan Acceptance? 
+
+This project analyzes factors influencing personal loan acceptance using data from **Kaggle’s Bank Personal Loan Modelling** dataset, which includes information on **5,000 customers**, such as age, income, education level, and mortgage status. The analysis models the likelihood of loan acceptance as a function of these variables, revealing that **customers with higher income and education levels** are more likely to accept a loan.
+
+In America, personal loans are a common financial product for various purposes, and understanding factors like age, income, education, and mortgage status helps assess loan acceptance risk. **Age** reflects life stage, **income** indicates repayment ability, **education** correlates with financial literacy and earning potential, and **mortgage status** shows existing commitments.
+
+The project uses **3D scatter plots** to visualize relationships between variables and loan acceptance, and a **statistical model** predicts the probability of loan acceptance based on these factors.
+
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+#| cache: true
+
+library(tidyverse)
+library(brms)
+library(plotly)
+library(tidybayes)
+library(gtsummary)
+library(ggridges)
+
+x <- read.csv("Bank_Personal_Loan_Modelling.csv") |> 
+  select(Age, Income, Education, Mortgage, Personal.Loan) |>
+  mutate(Treatment = ifelse(Personal.Loan > 0, "yes", "no"))
+
+# Fit the model
+fit_gauss <- brm(formula = Personal.Loan ~ Age + Income + Education + Mortgage + Treatment,
+                data = x,
+                family = gaussian(),
+                refresh = 0,
+                silent = 2,
+                seed = 9)
+
+# Create a 3D scatter plot for Age, Income, and Personal Loan
+fig1 <- plot_ly(
+  x = ~x$Age,
+  y = ~x$Income,
+  z = ~x$Personal.Loan,
+  color = ~x$Treatment,
+  colors = c('#FF6347', '#4682B4'),
+  type = 'scatter3d',
+  mode = 'markers'
+) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = 'Age'),
+      yaxis = list(title = 'Income'),
+      zaxis = list(title = 'Personal Loan'),
+      bgcolor = '#0b0a09'
+    ),
+    paper_bgcolor = '#0b0a09',
+    font = list(color = 'white')
+  )
+
+fig1
+```
+

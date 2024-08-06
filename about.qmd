@@ -1,0 +1,20 @@
+---
+format:
+  html:
+    css: styles.css
+execute: 
+  echo: false
+  warning: false
+---
+
+# About
+
+## About Me
+
+Hi, My name is [Rishith Ravi](https://github.com/rishithr19). I’m a rising high school sophomore. I enjoy video editing, computer science, and playing volleyball.
+
+You can reach me at <span style="background-color: #0b0a09; color: #9370DB;">27saravi@gmail.com</span>.
+
+## About this Project
+
+This project was created as a part of [Kane’s Data Science Bootcamp](https://bootcamp.davidkane.info/), a 6-week course that teaches you the basics of **Data Science**.
